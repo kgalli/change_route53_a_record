@@ -1,7 +1,7 @@
 include_recipe 'route53'
 
 instance_name = node[:opsworks][:instance][:hostname]
-stack_name    = node[:opsworks][:stack][:name]
+stack_name    = node[:opsworks][:stack][:name].downcase
 instance_name = node[:opsworks][:instance][:hostname]
 domain        = node[:custom_domain]
 
