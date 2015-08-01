@@ -9,7 +9,7 @@ public_ip     = node[:opsworks][:instance][:ip]
 domain        = node[:domain]
 
 route53_record "create a record" do
-  name  [instance_name, stack_name, domain].join(.)
+  name  [instance_name, stack_name, domain].join('.')
   value public_ip
   type  "A"
   ttl   300
