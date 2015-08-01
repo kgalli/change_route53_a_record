@@ -6,7 +6,7 @@ instance_name = node[:opsworks][:instance][:hostname]
 stack_name    = node[:opsworks][:stack][:name]
 instance_name = node[:opsworks][:instance][:hostname]
 public_ip     = node[:opsworks][:instance][:ip]
-domain        = node[:domain]
+domain        = node[:custom_domain]
 
 route53_record "create a record" do
   name  [instance_name, stack_name, domain].join('.')
