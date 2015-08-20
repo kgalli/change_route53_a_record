@@ -11,9 +11,9 @@ domain        = node[:custom_domain]
 route53_record "create a record" do
   name  [instance_name, stack_name, domain].join('.')
   value public_ip
-  type  "A"
   ttl   300
   zone_id               node[:dns_zone_id]
+  aws_region            node[:custom_region]
   aws_access_key_id     node[:custom_access_key]
   aws_secret_access_key node[:custom_secret_key]
   overwrite true
