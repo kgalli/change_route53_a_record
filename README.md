@@ -76,6 +76,8 @@ Custom JSON (example):
 
 # Areas to improve
 
+* The most important area to improve are tests. I skipped those because
+  this is just a proof of concept. Any further use should include tests.
 * The used schema for the DNS A record is fix but should implemented in a
   more flexible manner. It would be nice to have more control instead of
   `instance_name.stack_name.domain`. A possible solution to this problem
@@ -89,66 +91,12 @@ Custom JSON (example):
   of custom JSON or custom attributes for the `type` and `ttl`. Of course,
   the cookbook should be renamed after this enhancement.
 
-# Ideas of writing a custom LightWeight Resource/Provider (LWRP)
+# LightWeight Resource/Provider (LWRP)
 
-The LWRP route53 is using [fog The Ruby cloud service library](http://fog.io/).
-This LWRP could also be implemented using the
-[aws-sdk](http://docs.aws.amazon.com/sdkforruby/api/Aws/Route53.html)
-directly instead of the `fog-aws` gem.
-
-The `record` resource could be quite the same without the `mock`
-attribute. It already includes the set of reasonable attributes, data types
-and defaults. The actions are also what we need.
-
-```ruby
-actions :create, :delete
-
-default_action :create
-
-attribute :name,                  :kind_of => String, :required => true,
-:name_attribute => true
-attribute :value,                 :kind_of => [ String, Array ]
-attribute :type,                  :kind_of => String, :required => true
-attribute :ttl,                   :kind_of => Integer, :default => 3600
-attribute :zone_id,               :kind_of => String
-attribute :aws_access_key_id,     :kind_of => String
-attribute :aws_secret_access_key, :kind_of => String
-attribute :aws_session_token,     :kind_of => String
-attribute :overwrite,             :kind_of => [ TrueClass, FalseClass ],
-:default => true
-attribute :alias_target,          :kind_of => Hash
-```
-
-On the other hand, the provider could be changed to use the `aws-sdk` gem directly.
-As a starting point the `create` method call could look like this:
-
-````ruby
-resp = client.change_resource_record_sets({
-  hosted_zone_id: "ResourceId",
-  change_batch: {
-    changes: [
-      {
-        action: "CREATE",
-        resource_record_set: {
-          name: "DNSName",
-          type: "A",
-          ttl: 1,
-          resource_records: [
-            {
-              value: "RData"
-            }
-          ]
-        }
-      }
-    ]
-  }
-})
-```
-In general it might be a good idea to see how `fog-aws` is doing
-[it](https://github.com/fog/fog-aws/blob/master/lib/fog/aws/requests/dns/change_resource_record_sets.rb).
-
-Of course, in general it does not make sense to reinvent the wheel. But if
-the intention is to learn how to write LWRP in general I think it is a
-good practise to try to implement things on your own and compare the
-solution to whatever the community came up with.
+The chef cookbook uses my implementation of the LWRP
+[route53](https://github.com/kgalli/route53) which can be
+found on github. It uses a simple ruby gem called
+[route53_a_record](https://github.com/kgalli/route53_a_record)
+which source code is also located at github. For more information
+plesase visit the github repositories. You will find a `README.md` there.
 
