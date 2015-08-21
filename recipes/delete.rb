@@ -10,7 +10,6 @@ route53_record "delete a record" do
   name  [instance_name, stack_name, domain].join('.')
   value public_ip
   zone_id               node[:dns_zone_id]
-  aws_region            node[:custom_region]
   aws_access_key_id     node[:custom_access_key]
   aws_secret_access_key node[:custom_secret_key]
   action :delete
